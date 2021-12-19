@@ -31,8 +31,8 @@ function cache_purge_helper() {
   // Purge WordPress Cache
   $called_action_hook = current_filter();
   write_log('cph - initiated');
-  write_log('cph - running on'. $called_action_hook );
-  write_log('cph - flusing WordPress Cache first');
+  write_log('cph - running on '. $called_action_hook );
+  write_log('cph - flushing WordPress Cache first');
   wp_cache_flush();
   
   // If nginx-helper plugins is enabled, purge cache.
@@ -55,6 +55,15 @@ function cache_purge_helper() {
   }
   write_log('cph - end of cache_purge_helper function');
 }
+
+  // If RunCloud plugins is enabled, purge cache.
+  write_log('cph - checking for RunCloud plugin');
+	if ( class_exists('RunCloud_Hub') && is_callable( [ 'RunCloud_Hub', 'purge_cache_all_noaction' ] ) ) {
+	    RunCloud_Hub::purge_cache_all_noaction();
+	    write_log('cph - clearing RunCloud cache out');
+	} else {
+    write_log('cph - No RunCloud Plugin here');
+  }
 
 /* Log to WordPress Debug Log */
 if ( ! function_exists('write_log')) {
