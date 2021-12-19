@@ -60,7 +60,7 @@ function cache_purge_helper() {
   write_log('cph - checking for RunCloud plugin');
 	if ( class_exists('RunCloud_Hub') && is_callable( [ 'RunCloud_Hub', 'purge_cache_all_noaction' ] ) ) {
 	    RunCloud_Hub::purge_cache_all_noaction();
-	    write_log('cph - clearing RunCloud cache out');
+	    write_log('cph - flushing RunCloud cache out');
 	} else {
     write_log('cph - No RunCloud Plugin here');
   }
