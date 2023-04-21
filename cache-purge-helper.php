@@ -27,42 +27,46 @@
 * is activated for purging server cache.
 */
 
-function cache_purge_helper() {
-  // Purge WordPress Cache
-  $called_action_hook = current_filter();
-  write_log('cph - initiated');
-  write_log('cph - running on '. $called_action_hook );
-  write_log('cph - flushing WordPress Cache first');
-  wp_cache_flush();
+function cphp_purge() {
+    // Purge WordPress Cache
+    $called_action_hook = current_filter();
+    cphp_write_log('cphp - initiated');
+    cphp_write_log('cphp - running on'. $called_action_hook );
+    cphp_write_log('cphp - flusing WordPress Cache first');
+    wp_cache_flush();
   
-  // If nginx-helper plugins is enabled, purge cache.
-  write_log('cph - checking for nginx-helper plugin');
-  if ( is_plugin_active('nginx-helper/nginx-helper.php') ) {
-    write_log('cph - nginx-helper plugin installed, running $nginx_purger->purge_all();');
-    global $nginx_purger;
-    $nginx_purger->purge_all();
-  } else {
-    write_log('cph - nginx-helper plugin not installed or detected');
-  }
+    // If nginx-helper plugins is enabled, purge cache.
+    cphp_write_log('cphp - checking for nginx-helper plugin');
+
+    if ( is_plugin_active('nginx-helper/nginx-helper.php') ) {
+        cphp_write_log('cphp - nginx-helper plugin installed, running $nginx_purger->purge_all();');
+        global $nginx_purger;
+        $nginx_purger->purge_all();
+    } else {
+      cphp_write_log('cphp - nginx-helper plugin not installed or detected');
+    }
  
-  // If litespeed-cache plugins is enabled, purge cache.
-  write_log('cph - checking for litespeed-cache plugin');
-  if ( is_plugin_active('litespeed-cache/litespeed-cache.php') ) {
-    write_log('cph - litespeed-cache plugin installed, running do_action(\'litespeed_purge_all\');');
-    do_action( 'litespeed_purge_all' );
-  }  else {
-    write_log('cph - litespeed-cache plugin not installed or detected');
-  }
-  write_log('cph - end of cache_purge_helper function');
+    // If litespeed-cache plugins is enabled, purge cache.
+    cphp_write_log('cphp - checking for litespeed-cache plugin');
+
+    if ( is_plugin_active('litespeed-cache/litespeed-cache.php') ) {
+        cphp_write_log('cphp - litespeed-cache plugin installed, running do_action(\'litespeed_purge_all\');');
+        do_action( 'litespeed_purge_all' );
+    }  else {
+        cphp_write_log('cphp - litespeed-cache plugin not installed or detected');
+    }
+
+    // End of cache_purge_helper()
+    cphp_write_log('cphp - end of cache_purge_helper function');
 }
 
   // If RunCloud plugins is enabled, purge cache.
-  write_log('cph - checking for RunCloud plugin');
+  cphp_write_log('cph - checking for RunCloud plugin');
 	if ( class_exists('RunCloud_Hub') && is_callable( [ 'RunCloud_Hub', 'purge_cache_all_noaction' ] ) ) {
 	    RunCloud_Hub::purge_cache_all_noaction();
-	    write_log('cph - flushing RunCloud cache out');
+	    cphp_write_log('cph - flushing RunCloud cache out');
 	} else {
-    write_log('cph - No RunCloud Plugin here');
+    cphp_write_log('cph - No RunCloud Plugin here');
   }
 
 /** 
