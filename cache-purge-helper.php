@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Plugin Name:       Cache Purge Helper
+ * Plugin Name:       Cache Purge Helper RunCloud
  * Plugin URI:        https://wpinfo.net
  * Description:       Adding additional hooks to trigger nginx-helper or lscache plugin purges
- * Version:           0.1e
- * Author:            Paul Stoute, Jordan Trask, Jeff Cleverly
+ * Version:           0.1.4
+ * Author:            Paul Stoute, Jordan Trask, Jeff Cleverly, Neil Gowran
  * Author URI:        https://wpinfo.net
  * Text Domain:       cache-purge-helper
  * Domain Path:       /languages
@@ -65,41 +65,71 @@ function cache_purge_helper() {
     write_log('cph - No RunCloud Plugin here');
   }
 
-/* Log to WordPress Debug Log */
-if ( ! function_exists('write_log')) {
-  function write_log ( $log )  {
-    if ( is_array( $log ) || is_object( $log ) ) {
-      error_log( print_r( $log, true ) );
-    } else {
-      error_log( $log );
-    }
-  }
-} 
+/** 
+ * Log to WordPress Debug Log Function
+ * Log to PHP error_log if WP_DEBUG and CPH_DEBUG are set!
+ */
 
-// Plugin Update Hooks
-add_action( 'upgrader_process_complete', 'cache_purge_helper', 10, 0 ); // After plugins have been updated
-add_action( 'activated_plugin', 'cache_purge_helper', 10, 0); // After a plugin has been activated
-add_action( 'deactivated_plugin', 'cache_purge_helper', 10, 0); // After a plugin has been deactivated
-add_action( 'switch_theme', 'cache_purge_helper', 10, 0); // After a theme has been changed
+function cphp_write_log ( $log )  {
+    if ( WP_DEBUG === true && defined('CPHP_DEBUG')) {
+        if ( is_array( $log ) || is_object( $log ) ) {
+            error_log( print_r( $log, true ) );
+        } else {
+            error_log( $log );
+        }
+    }
+}
+
+/**
+ * WordPress core hooks.
+ */
+
+cphp_write_log('cphp - Loading WordPress core hooks');
+add_action( 'upgrader_process_complete', 'cphp_purge', 10, 0 ); // After a plugin, theme or core has been updated.
+add_action( 'activated_plugin', 'cphp_purge', 10, 0); // After a plugin has been activated
+add_action( 'deactivated_plugin', 'cphp_purge', 10, 0); // After a plugin has been deactivated
+add_action( 'switch_theme', 'cphp_purge', 10, 0); // After a theme has been changed
+
+/**
+ * Page builder hooks.
+ */
 
 // Beaver Builder
-add_action( 'fl_builder_cache_cleared', 'cache_purge_helper', 10, 3 );
-add_action( 'fl_builder_after_save_layout', 'cache_purge_helper', 10, 3 );
-add_action( 'fl_builder_after_save_user_template', 'cache_purge_helper', 10, 3 );
-add_action( 'upgrader_process_complete', 'cache_purge_helper', 10, 3 );
+if ( defined( 'FL_BUILDER_VERSION' ) ) {
+    cphp_write_log('cphp - Beaver Builder Hooks enabled');
+    add_action( 'fl_builder_cache_cleared', 'cphp_purge', 10, 3 );
+    add_action( 'fl_builder_after_save_layout', 'cphp_purge', 10, 3 );
+    add_action( 'fl_builder_after_save_user_template', 'cphp_purge', 10, 3 );
+}
 
 // Elementor
-add_action( 'elementor/core/files/clear_cache', 'cache_purge_helper', 10, 3 ); 
-add_action( 'update_option__elementor_global_css', 'cache_purge_helper', 10, 3 );
-add_action( 'delete_option__elementor_global_css', 'cache_purge_helper', 10, 3 );
-
-
-// AutoOptimizer
-add_action( 'autoptimize_action_cachepurged','cache_purge_helper', 10, 3 ); // Need to document this.
+if ( defined( 'ELEMENTOR_VERSION' ) ) {
+    cphp_write_log('cphp - Elementor hooks enabled');
+    add_action( 'elementor/core/files/clear_cache', 'cphp_purge', 10, 3 ); 
+    add_action( 'update_option__elementor_global_css', 'cphp_purge', 10, 3 );
+    add_action( 'delete_option__elementor_global_css', 'cphp_purge', 10, 3 );
+}
 
 // Oxygen
-add_action( 'wp_ajax_oxygen_vsb_cache_generated','cache_purge_helper', 99 );
-add_action( 'update_option__oxygen_vsb_universal_css_url','cache_purge_helper', 99 );
-add_action( 'update_option__oxygen_vsb_css_files_state','cache_purge_helper', 99 );
+if ( defined( 'CT_VERSION' ) ) {
+    cphp_write_log('cphp - Oxygen hooks enabled');
+    add_action( 'wp_ajax_oxygen_vsb_cache_generated','cphp_purge', 99 );
+    add_action( 'update_option__oxygen_vsb_universal_css_url','cphp_purge', 99 );
+    add_action( 'update_option__oxygen_vsb_css_files_state','cphp_purge', 99 );
+}
 
-           
+/**
+ * Optimization and caching plugin hooks.
+ */
+
+// Autoptimizer
+if ( defined( 'AUTOPTIMIZE_PLUGIN_DIR' ) ) {
+    cphp_write_log('cphp - Autoptimize hooks enabled');
+    add_action( 'autoptimize_action_cachepurged','cphp_purge', 10, 3 ); // Need to document this.
+}
+
+// WP Optimize Hooks
+if ( defined ('WPO_VERSION') ){
+    cphp_write_log('cphp - WP Optimize hooks enabled');
+    add_filter('wpo_purge_all_cache_on_update', '__return_true');
+}
