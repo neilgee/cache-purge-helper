@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Plugin Name:       Cache Purge Helper RunCloud
+ * Plugin Name:       Cache Purge Helper RunCloud OpenLiteSpeed
  * Plugin URI:        https://wpinfo.net
  * Description:       Adding additional hooks to trigger nginx-helper or lscache plugin purges
  * Version:           0.1.4
@@ -31,8 +31,8 @@ function cphp_purge() {
     // Purge WordPress Cache
     $called_action_hook = current_filter();
     cphp_write_log('cphp - initiated');
-    cphp_write_log('cphp - running on'. $called_action_hook );
-    cphp_write_log('cphp - flusing WordPress Cache first');
+    cphp_write_log('cphp - running on '. $called_action_hook );
+    cphp_write_log('cphp - flushing WordPress Cache first');
     wp_cache_flush();
   
     // If nginx-helper plugins is enabled, purge cache.
@@ -75,7 +75,7 @@ function cphp_purge() {
  */
 
 function cphp_write_log ( $log )  {
-    if ( WP_DEBUG === true && defined('CPHP_DEBUG')) {
+    if ( WP_DEBUG === true  ) {
         if ( is_array( $log ) || is_object( $log ) ) {
             error_log( print_r( $log, true ) );
         } else {
@@ -83,6 +83,8 @@ function cphp_write_log ( $log )  {
         }
     }
 }
+
+
 
 /**
  * WordPress core hooks.
