@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Plugin Name:       Cache Purge Helper RunCloud
- * Plugin URI:        https://wpinfo.net
+ * Plugin Name:       RunCloud Cache Purge Helper
+ * Plugin URI:        https://wpbeaches.com
  * Description:       Adding additional hooks to trigger nginx-helper or lscache plugin purges
- * Version:           0.1.4
+ * Version:           0.1.5
  * Author:            Paul Stoute, Jordan Trask, Jeff Cleverly, Neil Gowran
- * Author URI:        https://wpinfo.net
+ * Author URI:        https://wpbeaches.comt
  * Text Domain:       cache-purge-helper
  * Domain Path:       /languages
  * Requires at least: 3.0
@@ -34,17 +34,6 @@ function cphp_purge() {
     cphp_write_log('cphp - Running on '. $called_action_hook );
     cphp_write_log('cphp - Flushing WordPress Cache first');
     wp_cache_flush();
-  
-    // If nginx-helper plugins is enabled, purge cache.
-    cphp_write_log('cphp - Checking for nginx-helper plugin');
-
-    if ( is_plugin_active('nginx-helper/nginx-helper.php') ) {
-        cphp_write_log('cphp - nginx-helper plugin installed, running $nginx_purger->purge_all();');
-        global $nginx_purger;
-        $nginx_purger->purge_all();
-    } else {
-      cphp_write_log('cphp - nginx-helper plugin not installed or detected');
-    }
  
     // If litespeed-cache plugins is enabled, purge cache.
     cphp_write_log('cphp - Checking for litespeed-cache plugin');
