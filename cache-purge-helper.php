@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Plugin Name:       RunCloud Cache Purge Helper
+ * Plugin Name:       RunCloud OpenLiteSpeed Cache Purge Helper
  * Plugin URI:        https://wpbeaches.com
- * Description:       Adding additional hooks to trigger nginx-helper or lscache plugin purges
+ * Description:       Adding additional hooks to trigger lscache plugin purges
  * Version:           0.1.5
  * Author:            Paul Stoute, Jordan Trask, Jeff Cleverly, Neil Gowran
- * Author URI:        https://wpbeaches.comt
+ * Author URI:        https://wpbeaches.com
  * Text Domain:       cache-purge-helper
  * Domain Path:       /languages
  * Requires at least: 3.0
@@ -19,12 +19,7 @@
 
 /* Purge Cache Function
 *
-* If both nginx-helper and litespeed-cache plugin exist, purges will happen for both.
-* This is cover instances where nginx-helper is used for server cache but litespeed-cache
-* is used for other functions, or there is a mis-configuration.
-*
-* A better idea would be to check what server is being used and warn that the wrong plugin
-* is activated for purging server cache.
+* Liitespeed-cache plugin.
 */
 
 function rclc_purge() {
