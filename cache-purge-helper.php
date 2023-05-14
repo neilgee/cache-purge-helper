@@ -108,6 +108,14 @@ if ( defined( 'CT_VERSION' ) ) {
     add_action( 'update_option__oxygen_vsb_css_files_state','rclc_purge', 99 );
 }
 
+// Bricks
+if ( defined( 'BRICKS_VERSION' ) ) {
+    rclc_write_log('rclc - Bricks hooks enabled');
+   // add_action( 'wp_ajax_oxygen_vsb_cache_generated','rclc_purge', 99 );
+    //add_action( 'update_option__oxygen_vsb_universal_css_url','rclc_purge', 99 );
+   // add_action( 'update_option__oxygen_vsb_css_files_state','rclc_purge', 99 );
+}
+
 /**
  * Optimization and caching plugin hooks.
  */
