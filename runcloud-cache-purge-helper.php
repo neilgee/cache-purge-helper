@@ -3,18 +3,18 @@
 /**
  * Plugin Name:       RunCloud/OpenLiteSpeed Cache Purge Helper
  * Plugin URI:        https://wpbeaches.com
- * Description:       Adding additional hooks to trigger lscache plugin purges
+ * Description:       Adding additional WordPress and popular page builder hooks to trigger lscache plugin purges
  * Version:           0.1.5
  * Author:            Paul Stoute, Jordan Trask, Jeff Cleverly, Neil Gowran
  * Author URI:        https://wpbeaches.com
- * Text Domain:       cache-purge-helper
+ * Text Domain:       runcloud-cache-purge-helper
  * Domain Path:       /languages
  * Requires at least: 3.0
  * Tested up to:      5.4
  *
- * @link              https://wpinfo.net
+ * @link              https://wpbeaches.com
  * @since             0.1
- * @package           cache-purge-helper
+ * @package           runcloud-cache-purge-helper
  */
 
 /* Purge Cache Function
@@ -37,7 +37,7 @@ function rclc_purge() {
         rclc_write_log('rclc - Litespeed-cache plugin installed, running do_action(\'litespeed_purge_all\');');
         do_action( 'litespeed_purge_all' );
     }  else {
-        rclc_write_log('rclc - Litespeed-cache plugin not installed or detected');
+        rclc_write_log('rclc - No LiteSpeed Plugin here');
     }
 
     // End of cache_purge_helper()
