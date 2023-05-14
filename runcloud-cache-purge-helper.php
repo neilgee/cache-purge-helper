@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Plugin Name:       RunCloud OpenLiteSpeed Cache Purge Helper
+ * Plugin Name:       RunCloud/OpenLiteSpeed Cache Purge Helper
  * Plugin URI:        https://wpbeaches.com
  * Description:       Adding additional hooks to trigger lscache plugin purges
  * Version:           0.1.5
